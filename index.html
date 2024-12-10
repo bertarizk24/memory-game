@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>game</title>
+</head>
+
+<body>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            padding: 0%;
+            margin: 0%;
+            transition: all 0.4s;
+        }
+
+        body {
+            background-image: url(Cen-rio-tem-tico-do-Mickey-Mouse-Jungle-Safari-Party-Feliz-Anivers-rio-Go-Wild-Safari.webp);
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            background-attachment: fixed;
+            height: 100vh;
+            width: 100vw;
+
+        }
+
+        img {
+            width: 100px;
+
+        }
+
+        .info_container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            font-size: 30px;
+            font-weight: bold;
+            padding: 5px;
+            margin: 5px;
+        }
+
+        .info_container span {
+            padding: 10px;
+
+        }
+
+
+        #memory_game_blocks {
+
+            /* border: 3px solid; */
+            box-shadow: 3px 3px 6px rgb(13, 39, 11);
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-direction: row;
+            flex-wrap: wrap;
+            width: 90vw;
+            height: 90vh;
+            padding: 0px 20px;
+            margin: auto;
+
+            /* perspective: 1000px; */
+        }
+
+        .game {
+            width: 25%;
+            height: 23%;
+            transform: scale(1);
+            cursor: pointer;
+            transform-style: preserve-3d;
+            transition: .3s;
+            /* border: 1px solid; */
+            box-shadow: 1px 1px 5px rgb(30, 3, 3);
+            border-radius: 15px;
+            margin: 2px;
+
+
+
+        }
+
+        .game img {
+            width: 100%;
+            height: 100%;
+            border-radius: 5%;
+
+
+        }
+
+        .game:active {
+            transform: scale(.90);
+            /* transform-style: preserve-3d; */
+            transition: 0.3s;
+
+        }
+
+        .face_front,
+        .face_back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            /* padding: 3px; */
+            backface-visibility: hidden;
+
+
+        }
+
+        .face_front {
+            transform: rotateY(180deg);
+            box-shadow: 1px 1px 5px red;
+            border-radius: 5%;
+        }
+
+        .face_front.match {
+            transform: rotateY(180deg);
+            box-shadow: 1px 1px 5px green;
+            border-radius: 5%;
+            display: flex;
+        }
+
+        /* .unmatch{
+            transform: rotateY('-180deg');
+
+        } */
+
+        .game.flip {
+            transform: rotateY(180deg);
+            backface-visibility: hidden;
+        }
+
+        .match {
+            animation: 0.3s;
+
+        }
+
+        @keyframes match {
+            0% {
+                /* transform: scale(1); */
+            }
+
+            25% {
+                transform: scale(1.1);
+            }
+
+            50% {
+                transform: scale(2);
+            }
+
+
+
+            100% {
+                transform: scale(1.5);
+            }
+        }
+
+
+
+        #border_finished {
+            border: 1px solid transparent;
+            border-radius: 15px;
+            padding: 15px;
+            margin: auto;
+            width: 90vw;
+            height: 60vh;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            /* flex-direction: column; */
+            background-color: rgba(129, 175, 207, 0.786);
+            z-index: 1;
+
+        }
+
+        .border {
+            /* border: 1px solid; */
+            width: 50vw;
+            height: 40vh;
+            text-align: center;
+            margin-bottom: 100px;
+
+
+        }
+
+        .border img {
+            width: 100%;
+            height: 100%;
+            border-radius: 5%;
+
+        }
+
+        .border>* {
+            padding: 5px;
+            margin: 5px;
+            font-size: 18px;
+            font-weight: 600;
+            color: rebeccapurple;
+        }
+
+        .border button {
+            border: none;
+            border-radius: 5px;
+            padding: 8px;
+            transform: scale(1.2);
+
+        }
+
+        .border button:hover {
+            background-color: aliceblue;
+            background-color: transparent;
+            transform: scale(1.5);
+        }
+
+        .border p {
+            font-size: 22px;
+            font-weight: 900;
+            box-shadow: 1px 2px 3px;
+
+
+
+        }
+
+
+        @media (min-width: 1024px) {
+            .game {
+                width: 20%;
+                height: 35%;
+                margin-bottom: 5px;
+            }
+        }
+    </style>
+
+
+
+
+
+
+
+
+
+
+
+    <div class="info_container">
+        <div class="name">
+            score:<span id="score_box">0</span>
+            miss:<span id="miss_box">0</span>
+        </div>
+        <div class="tries">
+            Wrong Tries:<span>0</span>
+        </div>
+
+    </div>
+
+    <div id="border_finished">
+        <div class="border">
+            <img src="1000_F_389246345_eOfW9MU1KcOaDx93CMm6GDv3UQlTLxwq.jpg" alt="">
+            <p id="score_text">you win</p>
+            <button onclick="play_game()">Play Again</button>
+        </div>
+    </div>
+
+
+
+    <!-- blcks -->
+
+
+    <div id="memory_game_blocks">
+        <div class="game" data-value=meni>
+            <div class="face_front">
+                <img src="2150895523.jpg" alt="" width="20%">
+            </div>
+            <div class=" face_back">
+                <img src="png-clipart-question-mark-question-mark-white-child-image-file-formats.webp">
+
+            </div>
+
+        </div>
+        <!-- blok 2 -->
+        <div class="game" data-value=meni>
+            <div class="face_front">
+                <img src="2150895523.jpg" alt="" width="20%">
+            </div>
+            <div class="face_back">
+                <img src="png-clipart-question-mark-question-mark-white-child-image-file-formats.webp" width="20%"
+                    alt="">
+            </div>
+
+        </div>
+
+        <!-- blok 3 -->
+
+        <div class="game" data-value=micky>
+            <div class="face_front">
+                <img src="2151150893.jpg" alt="" width="20%">
+            </div>
+            <div class="face_back">
+                <img src="png-clipart-question-mark-question-mark-white-child-image-file-formats.webp" width="20%"
+                    alt="">
+            </div>
+
+        </div>
+
+        <!-- blok 4 -->
+
+        <div class="game" data-value=micky>
+            <div class="face_front">
+                <img src="2151150893.jpg" alt="" width="20%">
+            </div>
+            <div class="face_back">
+                <img src="png-clipart-question-mark-question-mark-white-child-image-file-formats.webp" width="20%"
+                    alt="">
+            </div>
+
+        </div>
+        <!-- blok 5 -->
+
+        <div class="game" data-value=bondk>
+            <div class="face_front">
+                <img src="ll7h_5nfv_230630.jpg" alt="" width="20%">
+            </div>
+            <div class="face_back">
+                <img src="png-clipart-question-mark-question-mark-white-child-image-file-formats.webp" width="20%"
+                    alt="">
+            </div>
+
+        </div>
+        <!-- blok 6 -->
+
+        <div class="game" data-value=bondk>
+            <div class="face_front">
+                <img src="ll7h_5nfv_230630.jpg" alt="" width="20%">
+            </div>
+            <div class="face_back">
+                <img src="png-clipart-question-mark-question-mark-white-child-image-file-formats.webp" width="20%"
+                    alt="">
+            </div>
+            <!-- blok 7 -->
+
+        </div>
+        <!-- blok 8 -->
+        <div class="game" data-value=meniii>
+            <div class="face_front">
+                <img src="2150895419.jpg" alt="" width="20%" height="100px">
+            </div>
+            <div class="face_back">
+                <img src="png-clipart-question-mark-question-mark-white-child-image-file-formats.webp" width="20%"
+                    alt="">
+            </div>
+
+            <!-- blok 9 -->
+        </div>
+        <div class="game" data-value=meniii>
+            <div class="face_front">
+                <img src="2150895419.jpg" width="20%" height="100px">
+            </div>
+            <div class="face_back">
+                <img src="png-clipart-question-mark-question-mark-white-child-image-file-formats.webp" width="20%"
+                    alt="">
+            </div>
+
+            <!-- blok 10 -->
+        </div>
+        <div class="game" data-value=mickymini>
+            <div class="face_front">
+                <img src="2150895467.jpg" alt="" width="20%">
+            </div>
+            <div class="face_back">
+                <img src="png-clipart-question-mark-question-mark-white-child-image-file-formats.webp" width="20%"
+                    alt="">
+            </div>
+
+        </div>
+        <div class="game" data-value=mickymini>
+            <div class="face_front">
+                <img src="2150895467.jpg" alt="" width="20%">
+            </div>
+            <div class="face_back">
+                <img src="png-clipart-question-mark-question-mark-white-child-image-file-formats.webp" width="20%"
+                    alt="">
+            </div>
+        </div>
+        <!-- card 12 -->
+        <div class="game" data-value=dog>
+            <div class="face_front">
+                <img src="2151147756.jpg" alt="" width="20%">
+            </div>
+            <div class="face_back">
+                <img src="png-clipart-question-mark-question-mark-white-child-image-file-formats.webp" width="20%"
+                    alt="">
+            </div>
+        </div>
+
+        <!-- card 13 -->
+        <div class="game" data-value=dog>
+            <div class="face_front">
+                <img src="2151147756.jpg" alt="">
+            </div>
+            <div class="face_back">
+                <img src="png-clipart-question-mark-question-mark-white-child-image-file-formats.webp" width="20%"
+                    alt="">
+            </div>
+
+
+
+        </div>
+
+        <audio src="flip.mp3" id="soun_card"></audio>
+        <audio src="" id="soun_win"></audio>
+        <audio src="" id="soun_loss"></audio>
+    </div>
+
+
+    <script>
+
+        const cards = document.querySelectorAll('.game');
+        console.log(cards);
+        let flippCard = [];
+        let wrongTries = 0;
+        const trisDisplay = document.querySelector('.tries span');
+        let flip = 0;
+        let pass_counter = 0;
+        let counter = 12;
+        let score = 0;
+        let miss = 0;
+
+        ///////////////////////////////////////// rest function
+        const play_game = function () {
+            score_box.innerText = '';
+            miss_box.innerText = '';
+            trisDisplay.innerText = '';
+            flippCard = [];
+            wrongTries = 0;
+            // const trisDisplay = document.querySelector('.tries span');
+            flip = 0;
+            pass_counter = 0;
+            counter = 12;
+            score = 0;
+            miss = 0;
+            shuffle(numbersArry)
+
+            border_finished.style.display = "none"
+            memory_game_blocks.style.display = "flex"
+          
+            
+            cards.forEach(function (card) {
+                card.classList.remove('flip');
+                card.classList.remove('match');
+                
+                
+                
+            })
+            console.log(play_game)
+            
+            shuffle(numbersArry)
+            console.log(numbersArry)
+            
+
+        }
+
+      
+
+        cards.forEach(function (card) {
+            card.addEventListener('click', function () {
+                console.log(this);
+                card.classList.add('flip');
+
+                soun_card.src = 'flip.mp3'
+                soun_card.play()
+
+                flip++;
+
+                if (flip == 2) {
+                    flip = 0;
+                    const flip_card = document.querySelectorAll('.flip:not(.match)')
+                    console.log(flip_card);
+                    const card_1 = flip_card[0].getAttribute('data-value')
+                    const card_2 = flip_card[1].getAttribute('data-value')
+                    console.log(card_1);
+                    console.log(card_2);
+
+
+
+
+
+                    setTimeout(() => {
+
+                        if (card_1 === card_2) {
+                            // add match
+
+                            flip_card[0].classList.add('match');
+                            flip_card[1].classList.add('match');
+                            pass_counter += 2;
+                            score += 1;
+                            score_box.innerText = +score;
+                            soun_win.src = 'win.mp3'
+                            soun_win.play()
+
+
+
+                            if (pass_counter == counter) {
+                                border_finished.style.display = "flex"
+                                memory_game_blocks.style.display = "none"
+
+
+                            }
+
+
+
+                            if (score > miss) {
+                                score_text.innerText = `you Are win`
+                            }
+                            if (score < miss) {
+                                score_text.innerText = `you Are loss Try again`
+                            }
+
+
+
+
+                        }
+                        else {
+
+                            // not a match
+                            flip_card[0].classList.remove('flip');
+                            flip_card[1].classList.remove('flip');
+                            miss += 1;
+                            miss_box.innerText = miss;
+                            console.log(miss)
+
+                            soun_loss.src = 'loss-sound-effect.mp3'
+                            soun_loss.play();
+
+                            wrongTries += +1
+                            trisDisplay.innerText = wrongTries;
+
+                            console.log(wrongTries);
+
+                        }
+
+
+
+                    }, 800);
+
+                }
+
+
+
+
+                ////////////////////////////////////////////////////////////////////////
+                // if (card.classList.contains('flip') ) {
+                //         flippCard.push(this);
+                //         console.log(flippCard);
+                //     }
+
+
+                //             if (flippCard.length == 2) {
+                //                     setTimeout(checkMatch, 600)
+
+                //                 }
+
+                //                 function checkMatch() {
+                //             // const [card1, card2] = flippCard;
+                //             const data_1 =  flippCard[0].getAttribute('data-value');
+                //             const data_2 =  flippCard[1].getAttribute('data-value');
+                //             if (data_1 === data_2) {
+
+                //                 flippCard[0].classList.add('match');
+                //                 flippCard[1].classList.add('match');
+                //                 let flippCard = [];
+                //                 console.log(flippCard);
+
+                //                 // let color=document.getElementsByClassName('.face_front');
+                //                 // color.classList.add('match')
+
+                //             }
+                //             else {
+                //                 setTimeout(() => {
+                //                 flippCard[0].classList.remove('flip');
+                //                     flippCard[1].classList.remove('flip');
+                //                     flippCard = [];
+                //                     wrongTries++;
+                //                     trisDisplay.textContent = wrongTries;
+                //                 }, 1000);
+
+                // }
+                // }
+                ////////////////////////////
+            });
+            // }
+        });
+
+
+
+
+        const numbersArry = Array.from({ length: cards.length }, (_, index) => index + 1);
+        console.log(numbersArry)
+
+
+        // numbersArry=> arry of number
+        shuffle(numbersArry);
+
+        function shuffle(arry) {
+
+
+            //  let num =[1,2,3,4,5,6,7,8,9];
+            //  let num_2=[1,2,3,4,5,6,7,8,9];
+            //  let num_3=[...num, ...num_2] ;
+            //  console.log(num_3)
+            //  const numbersArry = num_3.sort( ()=>{
+            //        return Math.random()*-0.5
+            //     })
+
+            ////////////////////
+            for (let i = arry.length - 1; i > 0; i--) {
+
+                const random = Math.floor(Math.random() * (i + 1));
+                [arry[i], arry[random]] = [arry[random], arry[i]];
+                ////////////////////////////////
+
+            }
+
+            cards.forEach(function (num, index) {
+                num.style.order = numbersArry[index];
+
+            })
+
+        }
+
+        console.log(numbersArry)
+
+
+    </script>
+</body>
+
+</html>
